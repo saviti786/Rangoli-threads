@@ -1,0 +1,5 @@
+<h1>Admin Dashboard</h1>
+<p>Welcome, <%= current_user.name || current_user.email %></p>
+<% if defined?(Product) %>
+  <p>Total products: <%= @product_count %></p>
+<% end %>
