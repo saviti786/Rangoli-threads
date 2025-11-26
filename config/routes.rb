@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   namespace :admin do
     root to: "dashboard#index"
+    resources :products
     get "dashboard/index"
   end
   devise_for :users, skip: [ :passwords ]

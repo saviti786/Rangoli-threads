@@ -1,5 +1,8 @@
 <h1>Admin Dashboard</h1>
 <p>Welcome, <%= current_user.name || current_user.email %></p>
+<%= link_to 'Manage Products', admin_products_path, class: 'btn btn-primary' %>
 <% if defined?(Product) %>
   <p>Total products: <%= @product_count %></p>
 <% end %>
+
+
