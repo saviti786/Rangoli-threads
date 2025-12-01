@@ -1,2 +1,329 @@
-<h1>Home#index</h1>
-<p>Find me in app/views/home/index.html.erb</p>
+<!-- Hero Section -->
+<div class="hero-section">
+  <div class="hero-overlay">
+    <div class="container">
+      <div class="row align-items-center min-vh-75">
+        <div class="col-lg-6 text-white">
+          <h1 class="display-3 fw-bold mb-4 animate-fade-in">
+            Welcome to Rangoli Threads
+          </h1>
+          <p class="lead mb-4 animate-fade-in-delay">
+            Discover authentic Indian ethnic wear in the heart of Winnipeg. From traditional sarees to contemporary kurtas, find your perfect style.
+          </p>
+          <div class="d-flex gap-3 animate-fade-in-delay-2">
+            <%= link_to products_path, class: "btn btn-primary btn-lg" do %>
+              <i class="bi bi-grid-3x3-gap"></i> Shop Now
+            <% end %>
+            <%= link_to new_arrivals_products_path, class: "btn btn-outline-light btn-lg" do %>
+              <i class="bi bi-star-fill"></i> New Arrivals
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Featured Categories -->
+<section class="py-5 bg-light">
+  <div class="container">
+    <div class="row mb-4">
+      <div class="col-12 text-center">
+        <h2 class="display-5 fw-bold mb-2">Shop by Category</h2>
+        <p class="text-muted">Explore our curated collections</p>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <% @categories.each do |category| %>
+        <div class="col-md-6 col-lg-3">
+          <%= link_to category_path(category), class: "text-decoration-none" do %>
+            <div class="category-card card h-100 border-0 shadow-sm">
+              <div class="card-body text-center p-4">
+                <div class="category-icon mb-3">
+                  <i class="bi <%= category_icon(category.name) %> display-4 text-primary"></i>
+                </div>
+                <h4 class="card-title mb-2"><%= category.name %></h4>
+                <p class="card-text text-muted mb-3">
+                  <%= pluralize(category.products.count, 'item') %>
+                </p>
+                <span class="btn btn-outline-primary btn-sm">
+                  Browse <i class="bi bi-arrow-right"></i>
+                </span>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<!-- Featured Products (On Sale) -->
+<% if @on_sale_products.any? %>
+  <section class="py-5">
+    <div class="container">
+      <div class="row mb-4">
+        <div class="col-12 d-flex justify-content-between align-items-center">
+          <div>
+            <h2 class="display-5 fw-bold mb-2">
+              <i class="bi bi-percent text-success"></i> Special Offers
+            </h2>
+            <p class="text-muted">Limited time deals on premium ethnic wear</p>
+          </div>
+          <%= link_to on_sale_products_path, class: "btn btn-success" do %>
+            View All <i class="bi bi-arrow-right"></i>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <% @on_sale_products.limit(4).each do |product| %>
+          <div class="col-sm-6 col-lg-3">
+            <div class="card h-100 product-card">
+              <%= link_to product_path(product), class: "text-decoration-none" do %>
+                <div class="position-relative">
+                  <% if product.image.attached? %>
+                    <%= image_tag product.image, class: "card-img-top", alt: product.name %>
+                  <% else %>
+                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center">
+                      <i class="bi bi-image text-muted" style="font-size: 4rem;"></i>
+                    </div>
+                  <% end %>
+                  <span class="badge bg-success position-absolute top-0 end-0 m-2">
+                    <i class="bi bi-percent"></i> SALE
+                  </span>
+                </div>
+              <% end %>
+
+              <div class="card-body">
+                <p class="text-muted small mb-1">
+                  <i class="bi bi-tag"></i> <%= product.category.name %>
+                </p>
+                <h5 class="card-title">
+                  <%= link_to product.name, product_path(product), class: "text-dark text-decoration-none" %>
+                </h5>
+                <p class="card-text text-muted small">
+                  <%= truncate(product.description, length: 60) %>
+                </p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <h4 class="text-primary fw-bold mb-0">
+                    $<%= number_with_precision(product.price, precision: 2) %>
+                  </h4>
+                  <%= link_to product_path(product), class: "btn btn-sm btn-outline-primary" do %>
+                    View <i class="bi bi-arrow-right"></i>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </section>
+<% end %>
+
+<!-- New Arrivals -->
+<% if @new_arrivals.any? %>
+  <section class="py-5 bg-light">
+    <div class="container">
+      <div class="row mb-4">
+        <div class="col-12 d-flex justify-content-between align-items-center">
+          <div>
+            <h2 class="display-5 fw-bold mb-2">
+              <i class="bi bi-star-fill text-info"></i> New Arrivals
+            </h2>
+            <p class="text-muted">Fresh styles just added to our collection</p>
+          </div>
+          <%= link_to new_arrivals_products_path, class: "btn btn-info" do %>
+            View All <i class="bi bi-arrow-right"></i>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <% @new_arrivals.limit(4).each do |product| %>
+          <div class="col-sm-6 col-lg-3">
+            <div class="card h-100 product-card">
+              <%= link_to product_path(product), class: "text-decoration-none" do %>
+                <div class="position-relative">
+                  <% if product.image.attached? %>
+                    <%= image_tag product.image, class: "card-img-top", alt: product.name %>
+                  <% else %>
+                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center">
+                      <i class="bi bi-image text-muted" style="font-size: 4rem;"></i>
+                    </div>
+                  <% end %>
+                  <span class="badge bg-info text-dark position-absolute top-0 end-0 m-2">
+                    <i class="bi bi-star-fill"></i> NEW
+                  </span>
+                </div>
+              <% end %>
+
+              <div class="card-body">
+                <p class="text-muted small mb-1">
+                  <i class="bi bi-tag"></i> <%= product.category.name %>
+                </p>
+                <h5 class="card-title">
+                  <%= link_to product.name, product_path(product), class: "text-dark text-decoration-none" %>
+                </h5>
+                <p class="card-text text-muted small">
+                  <%= truncate(product.description, length: 60) %>
+                </p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <h4 class="text-primary fw-bold mb-0">
+                    $<%= number_with_precision(product.price, precision: 2) %>
+                  </h4>
+                  <%= link_to product_path(product), class: "btn btn-sm btn-outline-primary" do %>
+                    View <i class="bi bi-arrow-right"></i>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </section>
+<% end %>
+
+<!-- Why Choose Us -->
+<section class="py-5">
+  <div class="container">
+    <div class="row mb-4">
+      <div class="col-12 text-center">
+        <h2 class="display-5 fw-bold mb-2">Why Choose Rangoli Threads?</h2>
+        <p class="text-muted">Your trusted partner for authentic Indian fashion</p>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-3 text-center">
+        <div class="feature-icon bg-primary bg-gradient text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+          <i class="bi bi-shield-check fs-2"></i>
+        </div>
+        <h4>Authentic Quality</h4>
+        <p class="text-muted">
+          Direct from trusted suppliers in India and Canada
+        </p>
+      </div>
+
+      <div class="col-md-3 text-center">
+        <div class="feature-icon bg-success bg-gradient text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+          <i class="bi bi-truck fs-2"></i>
+        </div>
+        <h4>Fast Shipping</h4>
+        <p class="text-muted">
+          Quick delivery across Canada
+        </p>
+      </div>
+
+      <div class="col-md-3 text-center">
+        <div class="feature-icon bg-info bg-gradient text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+          <i class="bi bi-scissors fs-2"></i>
+        </div>
+        <h4>Custom Alterations</h4>
+        <p class="text-muted">
+          Expert tailoring services available
+        </p>
+      </div>
+
+      <div class="col-md-3 text-center">
+        <div class="feature-icon bg-warning bg-gradient text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+          <i class="bi bi-headset fs-2"></i>
+        </div>
+        <h4>Expert Support</h4>
+        <p class="text-muted">
+          7 years of dedicated customer service
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Call to Action -->
+<section class="py-5 bg-dark text-white">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-8">
+        <h2 class="display-6 fw-bold mb-2">Ready to Find Your Perfect Outfit?</h2>
+        <p class="lead mb-lg-0">
+          Explore our complete collection of traditional and contemporary Indian ethnic wear
+        </p>
+      </div>
+      <div class="col-lg-4 text-lg-end">
+        <%= link_to products_path, class: "btn btn-primary btn-lg" do %>
+          <i class="bi bi-grid-3x3-gap"></i> Browse All Products
+        <% end %>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Custom Styles for Homepage -->
+<style>
+  .hero-section {
+    background: linear-gradient(135deg, rgba(217, 79, 112, 0.9) 0%, rgba(38, 70, 83, 0.9) 100%),
+                url('https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=1600') center/cover;
+    min-height: 600px;
+    position: relative;
+  }
+
+  .hero-overlay {
+    background: rgba(0, 0, 0, 0.3);
+  }
+
+  .min-vh-75 {
+    min-height: 75vh;
+  }
+
+  .category-card {
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .category-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15) !important;
+  }
+
+  .category-icon {
+    transition: transform 0.3s ease;
+  }
+
+  .category-card:hover .category-icon {
+    transform: scale(1.1);
+  }
+
+  .product-card {
+    transition: all 0.3s ease;
+  }
+
+  .product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 1s ease-in;
+  }
+
+  .animate-fade-in-delay {
+    animation: fadeIn 1s ease-in 0.3s both;
+  }
+
+  .animate-fade-in-delay-2 {
+    animation: fadeIn 1s ease-in 0.6s both;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

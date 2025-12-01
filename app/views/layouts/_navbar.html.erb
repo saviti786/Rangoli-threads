@@ -1,0 +1,118 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+  <div class="container">
+    <%= link_to "Rangoli Threads", root_path, class: "navbar-brand fw-bold" %>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <%= link_to products_path, class: "nav-link #{'active' if current_page?(products_path)}" do %>
+            <i class="bi bi-grid"></i> All Products
+          <% end %>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="categoriesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-tags"></i> Categories
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="categoriesDropdown">
+            <% Category.all.each do |category| %>
+              <li>
+                <%= link_to category.name, category_path(category), class: "dropdown-item" %>
+              </li>
+            <% end %>
+          </ul>
+        </li>
+
+        <li class="nav-item">
+          <%= link_to on_sale_products_path, class: "nav-link #{'active' if current_page?(on_sale_products_path)}" do %>
+            <i class="bi bi-percent"></i> On Sale
+          <% end %>
+        </li>
+
+        <li class="nav-item">
+          <%= link_to new_arrivals_products_path, class: "nav-link #{'active' if current_page?(new_arrivals_products_path)}" do %>
+            <i class="bi bi-star"></i> New Arrivals
+          <% end %>
+        </li>
+
+        <li class="nav-item">
+          <%= link_to about_path, class: "nav-link #{'active' if current_page?(about_path)}" do %>
+            <i class="bi bi-info-circle"></i> About
+          <% end %>
+        </li>
+
+        <li class="nav-item">
+          <%= link_to contact_path, class: "nav-link #{'active' if current_page?(contact_path)}" do %>
+            <i class="bi bi-envelope"></i> Contact
+          <% end %>
+        </li>
+
+        <!-- ADMIN LINK - Shows only for admins -->
+        <% if user_signed_in? && current_user.admin? %>
+          <li class="nav-item">
+            <%= link_to admin_root_path, class: "nav-link text-warning" do %>
+              <i class="bi bi-speedometer2"></i> Admin
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <i class="bi bi-cart"></i> Cart <span class="badge bg-danger">0</span>
+          </a>
+        </li>
+
+        <% if user_signed_in? %>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-person-circle"></i>
+              <%= current_user.name || current_user.email %>
+              <% if current_user.admin? %>
+                <span class="badge bg-warning text-dark">Admin</span>
+              <% end %>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+              <li>
+                <span class="dropdown-item-text">
+                  <small class="text-muted">Signed in as</small><br>
+                  <strong><%= current_user.email %></strong>
+                </span>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <% if current_user.admin? %>
+                <li>
+                  <%= link_to admin_root_path, class: "dropdown-item text-warning" do %>
+                    <i class="bi bi-speedometer2"></i> Admin Dashboard
+                  <% end %>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+              <% end %>
+              <li>
+                <%= button_to destroy_user_session_path, method: :delete, class: "dropdown-item text-danger", form: { data: { turbo: false } } do %>
+                  <i class="bi bi-box-arrow-right"></i> Logout
+                <% end %>
+              </li>
+            </ul>
+          </li>
+        <% else %>
+          <li class="nav-item">
+            <%= link_to new_user_session_path, class: "nav-link" do %>
+              <i class="bi bi-box-arrow-in-right"></i> Login
+            <% end %>
+          </li>
+          <li class="nav-item">
+            <%= link_to new_user_registration_path, class: "nav-link" do %>
+              <i class="bi bi-person-plus"></i> Sign Up
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</nav>

@@ -1,5 +1,14 @@
-<h1>Edit Product</h1>
+<div class="row mb-4">
+  <div class="col-12">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><%= link_to "Dashboard", admin_root_path %></li>
+        <li class="breadcrumb-item"><%= link_to "Products", admin_products_path %></li>
+        <li class="breadcrumb-item active">Edit Product</li>
+      </ol>
+    </nav>
+    <h2 class="fw-bold">Edit Product</h2>
+  </div>
+</div>
 
 <%= render 'form', product: @product %>
-
-<%= link_to 'Back', admin_products_path %>

@@ -1,10 +1,274 @@
 /*
- * This is a manifest file that'll be compiled into application.css.
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
  *
- * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
- * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
- * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
- * depending on specificity.
+ * Any CSS (and SCSS, if configured) file within this directory, lib/assets/stylesheets, or any plugin's
+ * vendor/assets/stylesheets directory can be referenced here using a relative path.
  *
- * Consider organizing styles into separate files for maintainability.
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require_tree .
+ *= require_self
  */
+
+/* Custom Colors for Rangoli Threads */
+:root {
+  --rangoli-primary: #d94f70;
+  --rangoli-secondary: #f4a261;
+  --rangoli-accent: #2a9d8f;
+  --rangoli-dark: #264653;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+/* Product Cards */
+.card {
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.card-img-top {
+  object-fit: cover;
+  height: 250px;
+}
+
+/* Badge Styles */
+.badge {
+  font-weight: 500;
+  padding: 0.5em 0.8em;
+}
+
+/* Product Price */
+.text-primary {
+  color: var(--rangoli-primary) !important;
+}
+
+/* Buttons */
+.btn-primary {
+  background-color: var(--rangoli-primary);
+  border-color: var(--rangoli-primary);
+}
+
+.btn-primary:hover {
+  background-color: #c23d5e;
+  border-color: #c23d5e;
+}
+
+.btn-success {
+  background-color: var(--rangoli-accent);
+  border-color: var(--rangoli-accent);
+}
+
+.btn-success:hover {
+  background-color: #258073;
+  border-color: #258073;
+}
+
+/* Navigation */
+.navbar-dark {
+  background-color: var(--rangoli-dark) !important;
+}
+
+.navbar-brand {
+  font-size: 1.5rem;
+  color: var(--rangoli-secondary) !important;
+}
+
+.nav-link {
+  transition: color 0.2s;
+}
+
+.nav-link:hover {
+  color: var(--rangoli-secondary) !important;
+}
+
+/* Footer */
+footer a:hover {
+  color: var(--rangoli-secondary) !important;
+}
+
+/* Search Section */
+.search-section {
+  background: linear-gradient(135deg, var(--rangoli-primary) 0%, var(--rangoli-dark) 100%);
+  color: white;
+  padding: 2rem 0;
+  margin-bottom: 2rem;
+}
+
+/* Filter Pills */
+.filter-pills .btn {
+  margin: 0.25rem;
+}
+
+/* Breadcrumbs */
+.breadcrumb {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 0.5rem;
+}
+
+/* Product Detail Page */
+.product-detail-image {
+  max-height: 600px;
+  object-fit: contain;
+}
+
+/* Pagination */
+.pagination {
+  margin-top: 2rem;
+}
+
+.pagination .page-link {
+  color: var(--rangoli-primary);
+}
+
+.pagination .page-item.active .page-link {
+  background-color: var(--rangoli-primary);
+  border-color: var(--rangoli-primary);
+}
+
+/* Alerts */
+.alert {
+  border-radius: 0.5rem;
+  border: none;
+}
+
+/* Forms */
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--rangoli-primary);
+  box-shadow: 0 0 0 0.2rem rgba(217, 79, 112, 0.25);
+}
+
+/* Category Pills */
+.category-pill {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  margin: 0.25rem;
+  background-color: #f8f9fa;
+  border-radius: 2rem;
+  text-decoration: none;
+  color: var(--rangoli-dark);
+  transition: all 0.2s;
+}
+
+.category-pill:hover {
+  background-color: var(--rangoli-primary);
+  color: white;
+  transform: scale(1.05);
+}
+
+/* Loading States */
+.skeleton {
+  animation: skeleton-loading 1s linear infinite alternate;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-color: hsl(200, 20%, 80%);
+  }
+
+  100% {
+    background-color: hsl(200, 20%, 95%);
+  }
+}
+
+/* Responsive Images */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Sale Badge Animation */
+@keyframes pulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.badge.bg-success {
+  animation: pulse 2s infinite;
+}
+
+/* Kaminari Pagination Bootstrap 5 Styling */
+.pagination {
+  display: flex;
+  padding-left: 0;
+  list-style: none;
+  gap: 0.25rem;
+}
+
+.pagination .page-item {
+  display: inline-block;
+}
+
+.pagination .page-link {
+  position: relative;
+  display: block;
+  padding: 0.375rem 0.75rem;
+  color: #d94f70;
+  text-decoration: none;
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  border-radius: 0.375rem;
+}
+
+.pagination .page-link:hover {
+  z-index: 2;
+  color: #c23d5e;
+  background-color: #e9ecef;
+  border-color: #dee2e6;
+}
+
+.pagination .page-link:focus {
+  z-index: 3;
+  color: #c23d5e;
+  background-color: #e9ecef;
+  outline: 0;
+  box-shadow: 0 0 0 0.25rem rgba(217, 79, 112, 0.25);
+}
+
+.pagination .active .page-link {
+  z-index: 3;
+  color: #fff;
+  background-color: #d94f70;
+  border-color: #d94f70;
+}
+
+.pagination .disabled .page-link {
+  color: #6c757d;
+  pointer-events: none;
+  background-color: #fff;
+  border-color: #dee2e6;
+}
+
+.pagination .first a,
+.pagination .prev a,
+.pagination .next a,
+.pagination .last a {
+  font-weight: 500;
+}

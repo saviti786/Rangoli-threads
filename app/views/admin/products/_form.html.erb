@@ -1,47 +1,94 @@
-<%# app/views/admin/products/_form.html.erb %>
-<%= form_with(model: [:admin, @product], local: true) do |f| %>
-  <div class="field">
-    <%= f.label :name %>
-    <%= f.text_field :name, class: "form-control" %>
-  </div>
+<%= form_with(model: [:admin, product], local: true, class: "needs-validation") do |f| %>
+  <% if product.errors.any? %>
+    <div class="alert alert-danger">
+      <h5><%= pluralize(product.errors.count, "error") %> prohibited this product from being saved:</h5>
+      <ul class="mb-0">
+        <% product.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
 
-  <div class="field">
-    <%= f.label :description %>
-    <%= f.text_area :description, class: "form-control" %>
-  </div>
+  <div class="row">
+    <div class="col-md-8">
+      <div class="card mb-4">
+        <div class="card-header bg-white">
+          <h5 class="mb-0">Product Information</h5>
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <%= f.label :name, class: "form-label fw-semibold" %>
+            <%= f.text_field :name, class: "form-control form-control-lg", placeholder: "e.g., Silk Saree" %>
+          </div>
 
-  <div class="field">
-    <%= f.label :price %>
-    <%= f.number_field :price, step: 0.01, class: "form-control" %>
-  </div>
+          <div class="mb-3">
+            <%= f.label :description, class: "form-label fw-semibold" %>
+            <%= f.text_area :description, rows: 5, class: "form-control", placeholder: "Describe the product..." %>
+          </div>
 
-  <div class="field">
-    <%= f.label :stock %>
-    <%= f.number_field :stock, class: "form-control" %>
-  </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <%= f.label :price, class: "form-label fw-semibold" %>
+              <div class="input-group">
+                <span class="input-group-text">$</span>
+                <%= f.number_field :price, step: 0.01, class: "form-control", placeholder: "0.00" %>
+              </div>
+            </div>
 
-  <div class="field">
-    <%= f.label :category_id %>
-    <%= f.collection_select :category_id, Category.all, :id, :name, { prompt: "Select a category" }, class: "form-control" %>
-  </div>
+            <div class="col-md-6 mb-3">
+              <%= f.label :stock, class: "form-label fw-semibold" %>
+              <%= f.number_field :stock, class: "form-control", placeholder: "0" %>
+            </div>
+          </div>
 
-  <div class="field">
-    <%= f.label :image %>
-    <%= f.file_field :image, class: "form-control" %>
-    <% if @product.image.attached? %>
-      <%= image_tag @product.image, width: 100 %>
-    <% end %>
-  </div>
+          <div class="mb-3">
+            <%= f.label :category_id, "Category", class: "form-label fw-semibold" %>
+            <%= f.collection_select :category_id, Category.all, :id, :name, { prompt: "Select a category" }, class: "form-select" %>
+          </div>
+        </div>
+      </div>
+    </div>
 
-  <div class="field">
-    <%= f.label :on_sale %>
-    <%= f.check_box :on_sale %>
-  </div>
+    <div class="col-md-4">
+      <div class="card mb-4">
+        <div class="card-header bg-white">
+          <h5 class="mb-0">Product Image</h5>
+        </div>
+        <div class="card-body">
+          <%= f.label :image, class: "form-label fw-semibold" %>
+          <%= f.file_field :image, class: "form-control mb-3", accept: "image/*" %>
 
-  <div class="field">
-    <%= f.label :new_arrival %>
-    <%= f.check_box :new_arrival %>
-  </div>
+          <% if product.image.attached? %>
+            <div class="mb-2">
+              <%= image_tag product.image, class: "img-fluid rounded" %>
+              <p class="text-muted small mt-2">Current image</p>
+            </div>
+          <% end %>
+        </div>
+      </div>
 
-  <%= f.submit class: "btn btn-primary" %>
+      <div class="card mb-4">
+        <div class="card-header bg-white">
+          <h5 class="mb-0">Product Status</h5>
+        </div>
+        <div class="card-body">
+          <div class="form-check form-switch mb-3">
+            <%= f.check_box :on_sale, class: "form-check-input", role: "switch" %>
+            <%= f.label :on_sale, "On Sale", class: "form-check-label" %>
+          </div>
+
+          <div class="form-check form-switch">
+            <%= f.check_box :new_arrival, class: "form-check-input", role: "switch" %>
+            <%= f.label :new_arrival, "New Arrival", class: "form-check-label" %>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-grid gap-2">
+        <%= f.submit class: "btn btn-primary btn-lg" %>
+        <%= link_to "Cancel", admin_products_path, class: "btn btn-outline-secondary" %>
+      </div>
+    </div>
+  </div>
 <% end %>

@@ -1,21 +1,156 @@
-<h1>Admin Dashboard</h1>
-<p>Welcome, <%= current_user.name || current_user.email %></p>
-
-<div class="admin-pages-section">
-  <h3>Manage Pages</h3>
-  <ul>
-    <% Page.all.each do |page| %>
-      <li>
-        <%= link_to page.title, edit_admin_page_path(page) %>
-        <small>(<%= link_to "View", page_path(page.slug), target: "_blank" %>)</small>
-      </li>
-    <% end %>
-  </ul>
+<div class="row mb-4">
+  <div class="col-12">
+    <h2 class="fw-bold">Dashboard</h2>
+    <p class="text-muted">Welcome back, <%= current_user.name || current_user.email %></p>
+  </div>
 </div>
 
-<%= link_to 'Manage Products', admin_products_path, class: 'btn btn-primary' %>
-<% if defined?(Product) %>
-  <p>Total products: <%= @product_count %></p>
+<!-- Stats Cards -->
+<div class="row g-4 mb-4">
+  <div class="col-md-6 col-lg-3">
+    <div class="card stat-card border-primary h-100">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <p class="text-muted mb-1">Total Products</p>
+            <h3 class="fw-bold mb-0"><%= @total_products %></h3>
+          </div>
+          <div class="bg-primary bg-opacity-10 p-3 rounded">
+            <i class="bi bi-box-seam text-primary fs-2"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-lg-3">
+    <div class="card stat-card border-success h-100">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <p class="text-muted mb-1">Categories</p>
+            <h3 class="fw-bold mb-0"><%= @total_categories %></h3>
+          </div>
+          <div class="bg-success bg-opacity-10 p-3 rounded">
+            <i class="bi bi-tags text-success fs-2"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-lg-3">
+    <div class="card stat-card border-warning h-100">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <p class="text-muted mb-1">On Sale</p>
+            <h3 class="fw-bold mb-0"><%= @on_sale_products %></h3>
+          </div>
+          <div class="bg-warning bg-opacity-10 p-3 rounded">
+            <i class="bi bi-percent text-warning fs-2"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6 col-lg-3">
+    <div class="card stat-card border-info h-100">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <p class="text-muted mb-1">New Arrivals</p>
+            <h3 class="fw-bold mb-0"><%= @new_arrivals %></h3>
+          </div>
+          <div class="bg-info bg-opacity-10 p-3 rounded">
+            <i class="bi bi-star text-info fs-2"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Recent Products -->
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header bg-white d-flex justify-content-between align-items-center">
+        <h5 class="mb-0"><i class="bi bi-clock-history"></i> Recent Products</h5>
+        <%= link_to admin_products_path, class: "btn btn-sm btn-primary" do %>
+          View All <i class="bi bi-arrow-right"></i>
+        <% end %>
+      </div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>Product</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @recent_products.each do |product| %>
+                <tr>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <% if product.image.attached? %>
+                        <%= image_tag product.image, class: "rounded me-2", style: "width: 50px; height: 50px; object-fit: cover;" %>
+                      <% else %>
+                        <div class="bg-light rounded me-2 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                          <i class="bi bi-image text-muted"></i>
+                        </div>
+                      <% end %>
+                      <strong><%= product.name %></strong>
+                    </div>
+                  </td>
+                  <td><%= product.category.name %></td>
+                  <td class="text-primary fw-bold">$<%= number_with_precision(product.price, precision: 2) %></td>
+                  <td>
+                    <% if product.stock < 10 %>
+                      <span class="badge bg-danger"><%= product.stock %></span>
+                    <% else %>
+                      <%= product.stock %>
+                    <% end %>
+                  </td>
+                  <td>
+                    <% if product.on_sale %>
+                      <span class="badge bg-success">On Sale</span>
+                    <% end %>
+                    <% if product.new_arrival %>
+                      <span class="badge bg-info">New</span>
+                    <% end %>
+                  </td>
+                  <td>
+                    <%= link_to edit_admin_product_path(product), class: "btn btn-sm btn-outline-primary" do %>
+                      <i class="bi bi-pencil"></i>
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% if @low_stock_products > 0 %>
+  <div class="row mt-4">
+    <div class="col-12">
+      <div class="alert alert-warning">
+        <i class="bi bi-exclamation-triangle-fill"></i>
+        <strong>Low Stock Alert!</strong>
+        You have <%= @low_stock_products %> product(s) with low stock (less than 10 units).
+        <%= link_to "View Products", admin_products_path, class: "alert-link" %>
+      </div>
+    </div>
+  </div>
 <% end %>
-
-

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Admin Dashboard - Rangoli Threads</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta charset="utf-8">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+
+    <style>
+      .admin-sidebar {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #264653 0%, #2a9d8f 100%);
+        color: white;
+      }
+
+      .admin-sidebar .nav-link {
+        color: rgba(255, 255, 255, 0.8);
+        padding: 1rem 1.5rem;
+        border-radius: 0.5rem;
+        margin-bottom: 0.5rem;
+        transition: all 0.3s;
+      }
+
+      .admin-sidebar .nav-link:hover,
+      .admin-sidebar .nav-link.active {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: white;
+      }
+
+      .admin-sidebar .nav-link i {
+        width: 25px;
+      }
+
+      .admin-content {
+        background-color: #f8f9fa;
+        min-height: 100vh;
+      }
+
+      .stat-card {
+        border-left: 4px solid;
+        transition: transform 0.2s;
+      }
+
+      .stat-card:hover {
+        transform: translateY(-5px);
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 col-lg-2 px-0 admin-sidebar">
+          <div class="p-4">
+            <h4 class="fw-bold mb-4">
+              <%= link_to root_path, class: "text-white text-decoration-none" do %>
+                <i class="bi bi-shop"></i> Rangoli Threads
+              <% end %>
+            </h4>
+
+            <nav class="nav flex-column">
+              <%= link_to admin_root_path, class: "nav-link #{'active' if current_page?(admin_root_path)}" do %>
+                <i class="bi bi-speedometer2"></i> Dashboard
+              <% end %>
+
+              <%= link_to admin_products_path, class: "nav-link #{'active' if controller_name == 'products'}" do %>
+                <i class="bi bi-box-seam"></i> Products
+              <% end %>
+
+              <%= link_to admin_categories_path, class: "nav-link #{'active' if controller_name == 'categories'}" do %>
+                <i class="bi bi-tags"></i> Categories
+              <% end %>
+
+              <%= link_to edit_admin_page_path(Page.find_by(slug: 'about')), class: "nav-link" do %>
+                <i class="bi bi-file-text"></i> About Page
+              <% end %>
+
+              <%= link_to edit_admin_page_path(Page.find_by(slug: 'contact')), class: "nav-link" do %>
+                <i class="bi bi-envelope"></i> Contact Page
+              <% end %>
+
+              <hr class="border-light">
+
+              <%= link_to root_path, class: "nav-link" do %>
+                <i class="bi bi-house"></i> View Store
+              <% end %>
+
+              <%= button_to destroy_user_session_path, method: :delete, class: "nav-link border-0 w-100 text-start", form: { data: { turbo: false } } do %>
+                <i class="bi bi-box-arrow-right"></i> Logout
+              <% end %>
+            </nav>
+          </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-9 col-lg-10 admin-content">
+          <!-- Top Bar -->
+          <div class="bg-white border-bottom sticky-top">
+            <div class="p-3 d-flex justify-content-between align-items-center">
+              <h5 class="mb-0">Admin Panel</h5>
+              <div class="text-muted">
+                <i class="bi bi-person-circle"></i> <%= current_user.email %>
+              </div>
+            </div>
+          </div>
+
+          <!-- Alerts -->
+          <div class="container-fluid py-3">
+            <% if notice %>
+              <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="bi bi-check-circle-fill"></i> <%= notice %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+              </div>
+            <% end %>
+
+            <% if alert %>
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-triangle-fill"></i> <%= alert %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+              </div>
+            <% end %>
+          </div>
+
+          <!-- Page Content -->
+          <div class="container-fluid pb-5">
+            <%= yield %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

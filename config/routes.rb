@@ -8,6 +8,19 @@ Rails.application.routes.draw do
   get "/about", to: "pages#show", slug: "about", as: "about"
   get "/contact", to: "pages#show", slug: "contact", as: "contact"
 
+  # Products routes
+  resources :products, only: [ :index, :show ] do
+    collection do
+      get :search
+      get :on_sale
+      get :new_arrivals
+      get :recently_updated
+    end
+  end
+
+  # Categories
+  resources :categories, only: [ :show ]
+
   namespace :admin do
     resources :pages, only: [ :edit, :update ]
     # get "pages/edit"
@@ -31,4 +44,5 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
   root "home#index"
+  # root "products#index"
 end
