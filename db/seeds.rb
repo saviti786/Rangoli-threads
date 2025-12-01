@@ -1,29 +1,39 @@
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Example:
-#
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
-#   end
-# Categories
-categories = Category.create!([
-  { name: "Sarees" },
-  { name: "Salwar Kameez" },
-  { name: "Lehengas" },
-  { name: "Kurtas" }
-])
-
-# Products
-products = [
-  { name: "Silk Saree", description: "Beautiful traditional silk saree", price: 199.99, stock: 10, category: categories[0] },
-  { name: "Cotton Salwar", description: "Comfortable cotton salwar kameez", price: 89.99, stock: 15, category: categories[1] },
-  { name: "Bridal Lehenga", description: "Elegant bridal lehenga with embroidery", price: 499.99, stock: 5, category: categories[2] }
+# Seed provinces with correct Canadian tax rates
+provinces_data = [
+  { name: 'Alberta', gst: 5.0, pst: 0.0, hst: 0.0 },
+  { name: 'British Columbia', gst: 5.0, pst: 7.0, hst: 0.0 },
+  { name: 'Manitoba', gst: 5.0, pst: 7.0, hst: 0.0 },
+  { name: 'New Brunswick', gst: 0.0, pst: 0.0, hst: 15.0 },
+  { name: 'Newfoundland and Labrador', gst: 0.0, pst: 0.0, hst: 15.0 },
+  { name: 'Northwest Territories', gst: 5.0, pst: 0.0, hst: 0.0 },
+  { name: 'Nova Scotia', gst: 0.0, pst: 0.0, hst: 15.0 },
+  { name: 'Nunavut', gst: 5.0, pst: 0.0, hst: 0.0 },
+  { name: 'Ontario', gst: 0.0, pst: 0.0, hst: 13.0 },
+  { name: 'Prince Edward Island', gst: 0.0, pst: 0.0, hst: 15.0 },
+  { name: 'Quebec', gst: 5.0, pst: 9.975, hst: 0.0 },
+  { name: 'Saskatchewan', gst: 5.0, pst: 6.0, hst: 0.0 },
+  { name: 'Yukon', gst: 5.0, pst: 0.0, hst: 0.0 }
 ]
 
-products.each do |product_attrs|
-  Product.create!(product_attrs)
+provinces_data.each do |province_data|
+  Province.find_or_create_by!(name: province_data[:name]) do |province|
+    province.gst = province_data[:gst]
+    province.pst = province_data[:pst]
+    province.hst = province_data[:hst]
+  end
 end
 
-puts "Created #{Category.count} categories and #{Product.count} products"
+puts "Seeded #{Province.count} provinces"
+
+# Seed pages
+Page.find_or_create_by!(slug: 'about') do |page|
+  page.title = 'About Us'
+  page.content = 'Welcome to Rangoli Threads...'
+end
+
+Page.find_or_create_by!(slug: 'contact') do |page|
+  page.title = 'Contact Us'
+  page.content = 'Get in touch with us...'
+end
+
+puts "Seeded pages"
