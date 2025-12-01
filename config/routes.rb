@@ -1,5 +1,17 @@
 Rails.application.routes.draw do
+  # get "pages/show"
+
+  # Public pages
+  get "/pages/:slug", to: "pages#show", as: "page"
+
+  # Convenience routes for about and contact
+  get "/about", to: "pages#show", slug: "about", as: "about"
+  get "/contact", to: "pages#show", slug: "contact", as: "contact"
+
   namespace :admin do
+    resources :pages, only: [ :edit, :update ]
+    # get "pages/edit"
+    # get "pages/update"
     root to: "dashboard#index"
     resources :products
     resources :categories

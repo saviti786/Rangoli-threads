@@ -1,5 +1,18 @@
 <h1>Admin Dashboard</h1>
 <p>Welcome, <%= current_user.name || current_user.email %></p>
+
+<div class="admin-pages-section">
+  <h3>Manage Pages</h3>
+  <ul>
+    <% Page.all.each do |page| %>
+      <li>
+        <%= link_to page.title, edit_admin_page_path(page) %>
+        <small>(<%= link_to "View", page_path(page.slug), target: "_blank" %>)</small>
+      </li>
+    <% end %>
+  </ul>
+</div>
+
 <%= link_to 'Manage Products', admin_products_path, class: 'btn btn-primary' %>
 <% if defined?(Product) %>
   <p>Total products: <%= @product_count %></p>
