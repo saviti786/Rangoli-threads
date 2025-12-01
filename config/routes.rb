@@ -18,6 +18,13 @@ Rails.application.routes.draw do
     end
   end
 
+  # Cart routes
+  get "cart", to: "cart#show"
+  post "cart/add/:id", to: "cart#add", as: "add_to_cart"
+  patch "cart/update/:id", to: "cart#update", as: "update_cart_item"
+  delete "cart/remove/:id", to: "cart#remove", as: "remove_from_cart"
+  delete "cart/clear", to: "cart#clear", as: "clear_cart"
+
   # Categories
   resources :categories, only: [ :show ]
 
