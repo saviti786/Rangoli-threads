@@ -1,0 +1,33 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1>Categories Management</h1>
+  <%= link_to "New Category", new_admin_category_path, class: "btn btn-success" %>
+</div>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <%# <th>Description</th>
+      <%#>Products Count</th>
+      <%#th>Actions</th> %>
+    </tr>
+  </thead>
+  <tbody>
+    <% @categories.each do |category| %>
+      <tr>
+        <td><strong><%= category.name %></strong></td>
+        <%# <td><%= category.description %>
+        <td><%= category.products.count %></td>
+        <td>
+          <%= link_to "Edit", edit_admin_category_path(category), class: "btn btn-primary btn-sm" %>
+          <%= link_to "Delete", admin_category_path(category),
+              data: {
+                turbo_method: :delete,
+                turbo_confirm: "Are you sure you want to delete '#{category.name}'? This will affect #{category.products.count} products."
+              },
+              class: "btn btn-danger btn-sm" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
