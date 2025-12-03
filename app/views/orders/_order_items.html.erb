@@ -1,0 +1,28 @@
+<div class="table-responsive mb-4">
+            <table class="table">
+              <thead class="table-light">
+                <tr>
+                  <th>Product</th>
+                  <th>Price</th>
+                  <th>Quantity</th>
+                  <th class="text-end">Subtotal</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% subtotal = 0 %>
+                <% @order.order_items.each do |item| %>
+                  <% item_subtotal = item.purchase_price * item.quantity %>
+                  <% subtotal += item_subtotal %>
+                  <tr>
+                    <td>
+                      <strong><%= item.product.name %></strong><br>
+                      <small class="text-muted"><%= item.product.category.name %></small>
+                    </td>
+                    <td>$<%= number_with_precision(item.purchase_price, precision: 2) %></td>
+                    <td><%= item.quantity %></td>
+                    <td class="text-end">$<%= number_with_precision(item_subtotal, precision: 2) %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>

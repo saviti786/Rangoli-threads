@@ -1,0 +1,36 @@
+<div class="row">
+            <div class="col-md-6 ms-auto">
+              <table class="table">
+                <tr>
+                  <td><strong>Subtotal:</strong></td>
+                  <td class="text-end">$<%= number_with_precision(subtotal, precision: 2) %></td>
+                </tr>
+
+                <% if @order.gst_rate > 0 %>
+                  <tr>
+                    <td>GST (<%= @order.gst_rate %>%):</td>
+                    <td class="text-end">$<%= number_with_precision(subtotal * @order.gst_rate / 100, precision: 2) %></td>
+                  </tr>
+                <% end %>
+
+                <% if @order.pst_rate > 0 %>
+                  <tr>
+                    <td>PST (<%= @order.pst_rate %>%):</td>
+                    <td class="text-end">$<%= number_with_precision(subtotal * @order.pst_rate / 100, precision: 2) %></td>
+                  </tr>
+                <% end %>
+
+                <% if @order.hst_rate > 0 %>
+                  <tr>
+                    <td>HST (<%= @order.hst_rate %>%):</td>
+                    <td class="text-end">$<%= number_with_precision(subtotal * @order.hst_rate / 100, precision: 2) %></td>
+                  </tr>
+                <% end %>
+
+                <tr class="table-dark">
+                  <td><strong>Total:</strong></td>
+                  <td class="text-end"><strong class="text-primary fs-5">$<%= number_with_precision(@order.total_amount, precision: 2) %></strong></td>
+                </tr>
+              </table>
+            </div>
+          </div>
