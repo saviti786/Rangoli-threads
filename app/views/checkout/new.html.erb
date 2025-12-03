@@ -1,0 +1,175 @@
+<div class="container my-5">
+  <div class="row mb-4">
+    <div class="col-12">
+      <h1 class="fw-bold"><i class="bi bi-credit-card"></i> Checkout</h1>
+      <p class="text-muted">Complete your order</p>
+    </div>
+  </div>
+
+  <%= form_with url: checkout_path, method: :post, local: true, id: "checkout-form" do |f| %>
+    <div class="row">
+      <!-- Left Column - Address and Review -->
+      <div class="col-lg-8">
+        <!-- Shipping Address -->
+        <div class="card mb-4">
+          <div class="card-header bg-dark text-white">
+            <h5 class="mb-0"><i class="bi bi-geo-alt"></i> Shipping Address</h5>
+          </div>
+          <div class="card-body">
+            <%= fields_for :user, @user do |user_form| %>
+              <div class="mb-3">
+                <%= user_form.label :street, "Street Address", class: "form-label fw-semibold" %>
+                <%= user_form.text_field :street,
+                    class: "form-control",
+                    placeholder: "123 Main Street",
+                    value: @user.street,
+                    required: true %>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <%= user_form.label :city, class: "form-label fw-semibold" %>
+                  <%= user_form.text_field :city,
+                      class: "form-control",
+                      placeholder: "Winnipeg",
+                      value: @user.city,
+                      required: true %>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <%= user_form.label :postal_code, class: "form-label fw-semibold" %>
+                  <%= user_form.text_field :postal_code,
+                      class: "form-control",
+                      placeholder: "R3B 0N2",
+                      value: @user.postal_code,
+                      required: true %>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <%= user_form.label :province_id, "Province", class: "form-label fw-semibold" %>
+                <%= user_form.collection_select :province_id,
+                    @provinces,
+                    :id,
+                    :name,
+                    { selected: @user.province_id },
+                    { class: "form-select", required: true, id: "province_select" } %>
+                <small class="text-muted">Tax rates will be calculated based on your province</small>
+              </div>
+            <% end %>
+          </div>
+        </div>
+
+        <!-- Order Review -->
+        <div class="card mb-4">
+          <div class="card-header bg-dark text-white">
+            <h5 class="mb-0"><i class="bi bi-bag-check"></i> Order Review</h5>
+          </div>
+          <div class="card-body">
+            <% @cart_items.each do |item| %>
+              <div class="row align-items-center border-bottom py-3">
+                <div class="col-2">
+                  <% if item[:product].image.attached? %>
+                    <%= image_tag item[:product].image, class: "img-fluid rounded", alt: item[:product].name %>
+                  <% else %>
+                    <div class="bg-light rounded d-flex align-items-center justify-content-center" style="height: 60px;">
+                      <i class="bi bi-image text-muted"></i>
+                    </div>
+                  <% end %>
+                </div>
+                <div class="col-6">
+                  <strong><%= item[:product].name %></strong><br>
+                  <small class="text-muted"><%= item[:product].category.name %></small><br>
+                  <small class="text-muted">Quantity: <%= item[:quantity] %></small>
+                </div>
+                <div class="col-4 text-end">
+                  <strong class="text-primary">
+                    $<%= number_with_precision(item[:subtotal], precision: 2) %>
+                  </strong>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column - Order Summary -->
+      <div class="col-lg-4">
+        <div class="card sticky-top" style="top: 20px;">
+          <div class="card-header bg-dark text-white">
+            <h5 class="mb-0"><i class="bi bi-receipt"></i> Order Summary</h5>
+          </div>
+          <div class="card-body">
+            <div class="d-flex justify-content-between mb-2">
+              <span>Subtotal:</span>
+              <span class="fw-bold" id="subtotal">
+                $<%= number_with_precision(@cart_total, precision: 2) %>
+              </span>
+            </div>
+
+            <div class="d-flex justify-content-between mb-2">
+            <span>GST (<%= @user.province&.gst || 0 %>%):</span>
+            <span>$<%= number_with_precision(@gst, precision: 2) %></span>
+          </div>
+
+          <div class="d-flex justify-content-between mb-2">
+            <span>PST (<%= @user.province&.pst || 0 %>%):</span>
+            <span>$<%= number_with_precision(@pst, precision: 2) %></span>
+          </div>
+
+          <div class="d-flex justify-content-between mb-2">
+            <span>HST (<%= @user.province&.hst || 0 %>%):</span>
+            <span>$<%= number_with_precision(@hst, precision: 2) %></span>
+          </div>
+
+          <hr>
+
+          <div class="d-flex justify-content-between mb-3">
+            <strong>Total:</strong>
+            <h4 class="text-primary fw-bold mb-0">
+              $<%= number_with_precision(@total, precision: 2) %>
+            </h4>
+          </div>
+
+          <% if @user.province_id.blank? %>
+            <div class="alert alert-warning small mb-3">
+              <i class="bi bi-exclamation-triangle"></i>
+              Please select a province to see final total with taxes.
+            </div>
+          <% end %>
+
+          <div class="d-grid gap-2">
+            <%= f.submit "Place Order", class: "btn btn-primary btn-lg", disabled: @user.province_id.blank? %>
+            <%= link_to "Back to Cart", cart_path, class: "btn btn-outline-secondary" %>
+          </div>
+
+          <div class="card-footer bg-light">
+            <div class="small text-muted">
+              <i class="bi bi-shield-check me-2"></i>
+              <strong>Secure Checkout</strong><br>
+              Your information is protected
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const provinceSelect = document.getElementById("province_select");
+  const placeOrderBtn = document.querySelector("#checkout-form input[type='submit']");
+
+  provinceSelect.addEventListener("change", () => {
+    if (provinceSelect.value) {
+      placeOrderBtn.disabled = false;
+    } else {
+      placeOrderBtn.disabled = true;
+    }
+  });
+});
+</script>
+
+
+

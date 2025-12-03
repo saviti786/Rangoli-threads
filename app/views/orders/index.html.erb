@@ -1,0 +1,77 @@
+<div class="container my-5">
+  <div class="row mb-4">
+    <div class="col-12">
+      <h1 class="fw-bold"><i class="bi bi-bag-check"></i> My Orders</h1>
+      <p class="text-muted">View your order history</p>
+    </div>
+  </div>
+
+  <% if @orders.any? %>
+    <% @orders.each do |order| %>
+      <div class="card mb-3">
+        <div class="card-header bg-light">
+          <div class="row align-items-center">
+            <div class="col-md-3">
+              <strong>Order #<%= order.id %></strong><br>
+              <small class="text-muted"><%= order.created_at.strftime("%B %d, %Y") %></small>
+            </div>
+            <div class="col-md-3">
+              <small class="text-muted">Total</small><br>
+              <strong class="text-primary">$<%= number_with_precision(order.total_amount, precision: 2) %></strong>
+            </div>
+            <div class="col-md-3">
+              <small class="text-muted">Status</small><br>
+              <span class="badge bg-<%= order.status == 'pending' ? 'warning' : 'success' %>">
+                <%= order.status.titleize %>
+              </span>
+            </div>
+            <div class="col-md-3 text-end">
+              <%= link_to "View Details", order_path(order), class: "btn btn-sm btn-primary" %>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <% order.order_items.limit(3).each do |item| %>
+              <div class="col-md-4">
+                <div class="d-flex align-items-center">
+                  <% if item.product.image.attached? %>
+                    <%= image_tag item.product.image, class: "rounded me-2", style: "width: 50px; height: 50px; object-fit: cover;" %>
+                  <% else %>
+                    <div class="bg-light rounded me-2 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                      <i class="bi bi-image text-muted"></i>
+                    </div>
+                  <% end %>
+                  <div>
+                    <strong class="small"><%= item.product.name %></strong><br>
+                    <small class="text-muted">Qty: <%= item.quantity %></small>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+            <% if order.order_items.count > 3 %>
+              <div class="col-md-12 text-center mt-2">
+                <small class="text-muted">+ <%= order.order_items.count - 3 %> more items</small>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="mt-4">
+      <%= paginate @orders %>
+    </div>
+  <% else %>
+    <div class="card text-center py-5">
+      <div class="card-body">
+        <i class="bi bi-bag-x display-1 text-muted mb-4"></i>
+        <h3>No orders yet</h3>
+        <p class="text-muted mb-4">Start shopping to create your first order!</p>
+        <%= link_to products_path, class: "btn btn-primary" do %>
+          <i class="bi bi-grid-3x3-gap"></i> Browse Products
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>

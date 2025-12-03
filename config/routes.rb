@@ -25,6 +25,13 @@ Rails.application.routes.draw do
   delete "cart/remove/:id", to: "cart#remove", as: "remove_from_cart"
   delete "cart/clear", to: "cart#clear", as: "clear_cart"
 
+  # Checkout routes
+  get "checkout", to: "checkout#new", as: "new_checkout"
+  post "checkout", to: "checkout#create", as: "checkout"
+
+  # Orders routes
+  resources :orders, only: [ :index, :show ]
+
   # Categories
   resources :categories, only: [ :show ]
 

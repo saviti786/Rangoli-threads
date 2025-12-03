@@ -134,14 +134,10 @@
             </div>
 
             <div class="d-grid gap-2">
-              <button class="btn btn-primary btn-lg" disabled>
-                <i class="bi bi-lock"></i> Proceed to Checkout
-              </button>
-              <small class="text-muted text-center">
-                (Checkout coming soon)
-              </small>
+            <%= link_to new_checkout_path, class: "btn btn-primary btn-lg" do %>
+              <i class="bi bi-credit-card"></i> Proceed to Checkout
+            <% end %>
             </div>
-          </div>
 
           <div class="card-footer bg-light">
             <div class="d-flex align-items-center text-muted small">
