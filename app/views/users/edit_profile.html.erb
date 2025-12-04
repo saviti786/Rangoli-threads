@@ -1,0 +1,74 @@
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow">
+        <div class="card-header bg-dark text-white">
+          <h4 class="mb-0"><i class="bi bi-person-circle"></i> Edit Profile</h4>
+        </div>
+        <div class="card-body p-4">
+          <%= form_with model: @user, url: update_profile_path, method: :patch, local: true do |f| %>
+            <% if @user.errors.any? %>
+              <div class="alert alert-danger">
+                <h5><%= pluralize(@user.errors.count, "error") %> prohibited this profile from being saved:</h5>
+                <ul class="mb-0">
+                  <% @user.errors.full_messages.each do |message| %>
+                    <li><%= message %></li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+
+            <h5 class="mb-3">Personal Information</h5>
+
+            <div class="mb-3">
+              <%= f.label :name, class: "form-label fw-semibold" %>
+              <%= f.text_field :name, class: "form-control", required: true %>
+            </div>
+
+            <div class="mb-3">
+              <%= f.label :email, class: "form-label fw-semibold" %>
+              <%= f.email_field :email, class: "form-control", disabled: true %>
+              <small class="text-muted">Email cannot be changed here. Use account settings to change email.</small>
+            </div>
+
+            <hr class="my-4">
+
+            <h5 class="mb-3">Shipping Address</h5>
+
+            <div class="mb-3">
+              <%= f.label :street, "Street Address", class: "form-label fw-semibold" %>
+              <%= f.text_field :street, class: "form-control", placeholder: "123 Main Street" %>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <%= f.label :city, class: "form-label fw-semibold" %>
+                <%= f.text_field :city, class: "form-control", placeholder: "Winnipeg" %>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <%= f.label :postal_code, class: "form-label fw-semibold" %>
+                <%= f.text_field :postal_code, class: "form-control", placeholder: "R3B 0N2" %>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <%= f.label :province_id, "Province", class: "form-label fw-semibold" %>
+              <%= f.collection_select :province_id,
+                  @provinces,
+                  :id,
+                  :name,
+                  { prompt: "Select your province" },
+                  { class: "form-select" } %>
+            </div>
+
+            <div class="d-flex gap-2">
+              <%= f.submit "Update Profile", class: "btn btn-primary" %>
+              <%= link_to "Cancel", root_path, class: "btn btn-outline-secondary" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

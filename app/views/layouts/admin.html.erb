@@ -69,36 +69,40 @@
             </h4>
 
             <nav class="nav flex-column">
-              <%= link_to admin_root_path, class: "nav-link #{'active' if current_page?(admin_root_path)}" do %>
-                <i class="bi bi-speedometer2"></i> Dashboard
-              <% end %>
+  <%= link_to admin_root_path, class: "nav-link #{'active' if current_page?(admin_root_path)}" do %>
+    <i class="bi bi-speedometer2"></i> Dashboard
+  <% end %>
 
-              <%= link_to admin_products_path, class: "nav-link #{'active' if controller_name == 'products'}" do %>
-                <i class="bi bi-box-seam"></i> Products
-              <% end %>
+  <%= link_to admin_products_path, class: "nav-link #{'active' if controller_name == 'products'}" do %>
+    <i class="bi bi-box-seam"></i> Products
+  <% end %>
 
-              <%= link_to admin_categories_path, class: "nav-link #{'active' if controller_name == 'categories'}" do %>
-                <i class="bi bi-tags"></i> Categories
-              <% end %>
+  <%= link_to admin_categories_path, class: "nav-link #{'active' if controller_name == 'categories'}" do %>
+    <i class="bi bi-tags"></i> Categories
+  <% end %>
 
-              <%= link_to edit_admin_page_path(Page.find_by(slug: 'about')), class: "nav-link" do %>
-                <i class="bi bi-file-text"></i> About Page
-              <% end %>
+  <%= link_to admin_orders_path, class: "nav-link #{'active' if controller_name == 'orders'}" do %>
+    <i class="bi bi-bag-check"></i> Orders
+  <% end %>
 
-              <%= link_to edit_admin_page_path(Page.find_by(slug: 'contact')), class: "nav-link" do %>
-                <i class="bi bi-envelope"></i> Contact Page
-              <% end %>
+  <%= link_to edit_admin_page_path(Page.find_by(slug: 'about')), class: "nav-link" do %>
+    <i class="bi bi-file-text"></i> About Page
+  <% end %>
 
-              <hr class="border-light">
+  <%= link_to edit_admin_page_path(Page.find_by(slug: 'contact')), class: "nav-link" do %>
+    <i class="bi bi-envelope"></i> Contact Page
+  <% end %>
 
-              <%= link_to root_path, class: "nav-link" do %>
-                <i class="bi bi-house"></i> View Store
-              <% end %>
+  <hr class="border-light">
 
-              <%= button_to destroy_user_session_path, method: :delete, class: "nav-link border-0 w-100 text-start", form: { data: { turbo: false } } do %>
-                <i class="bi bi-box-arrow-right"></i> Logout
-              <% end %>
-            </nav>
+  <%= link_to root_path, class: "nav-link" do %>
+    <i class="bi bi-house"></i> View Store
+  <% end %>
+
+  <%= button_to destroy_user_session_path, method: :delete, class: "nav-link border-0 w-100 text-start", form: { data: { turbo: false } } do %>
+    <i class="bi bi-box-arrow-right"></i> Logout
+  <% end %>
+</nav>
           </div>
         </div>
 

@@ -7,30 +7,18 @@ class CartController < ApplicationController
   end
 
   def add
-    product = Product.find(params[:id])
-    quantity = params[:quantity].to_i
-    quantity = 1 if quantity < 1
+    product = find_product
+    return redirect_to products_path, alert: "Product not found." unless product
 
-    # Check if product has enough stock
-    if product.stock < quantity
-      redirect_to product_path(product), alert: "Sorry, only #{product.stock} items available in stock."
-      return
+    quantity = sanitize_quantity(params[:quantity])
+
+    if exceeds_stock?(product, quantity)
+      return redirect_to product_path(product),
+                         alert: "Sorry, only #{product.stock} items available in stock."
     end
 
-    # Initialize cart if not exists
-    session[:cart] ||= {}
-
-    # Add or update quantity
-    if session[:cart][product.id.to_s]
-      new_quantity = session[:cart][product.id.to_s] + quantity
-      if new_quantity > product.stock
-        redirect_to product_path(product), alert: "Cannot add more items. Only #{product.stock} available."
-        return
-      end
-      session[:cart][product.id.to_s] = new_quantity
-    else
-      session[:cart][product.id.to_s] = quantity
-    end
+    initialize_cart
+    add_to_cart(product, quantity)
 
     redirect_to cart_path, notice: "#{product.name} added to cart!"
   end
@@ -40,32 +28,59 @@ class CartController < ApplicationController
     quantity = params[:quantity].to_i
 
     if quantity <= 0
-      session[:cart].delete(product_id)
+      remove_item(product_id)
       redirect_to cart_path, notice: "Item removed from cart."
     else
-      product = Product.find_by(id: product_id)
-
-      if product && quantity > product.stock
-        redirect_to cart_path, alert: "Only #{product.stock} items available in stock."
-      else
-        session[:cart][product_id] = quantity
-        redirect_to cart_path, notice: "Cart updated."
-      end
+      update_item_quantity(product_id, quantity)
     end
   end
 
   def remove
-    product_id = params[:id]
-    product = Product.find_by(id: product_id)
-    product_name = product&.name || "Item"
-
-    session[:cart].delete(product_id)
-
-    redirect_to cart_path, notice: "#{product_name} removed from cart."
+    remove_item(params[:id])
+    redirect_to cart_path, notice: "Item removed from cart."
   end
 
   def clear
     session[:cart] = {}
     redirect_to cart_path, notice: "Cart cleared."
+  end
+
+  private
+
+  def find_product
+    Product.find_by(id: params[:id])
+  end
+
+  def sanitize_quantity(qty_param)
+    qty = qty_param.to_i
+    qty < 1 ? 1 : qty
+  end
+
+  def initialize_cart
+    session[:cart] ||= {}
+  end
+
+  def exceeds_stock?(product, quantity)
+    current_quantity = session[:cart]&.[](product.id.to_s) || 0
+    (current_quantity + quantity) > product.stock
+  end
+
+  def add_to_cart(product, quantity)
+    product_id = product.id.to_s
+    session[:cart][product_id] = (session[:cart][product_id] || 0) + quantity
+  end
+
+  def update_item_quantity(product_id, quantity)
+    product = Product.find_by(id: product_id)
+    if product && quantity > product.stock
+      redirect_to cart_path, alert: "Only #{product.stock} items available in stock."
+    else
+      session[:cart][product_id] = quantity
+      redirect_to cart_path, notice: "Cart updated."
+    end
+  end
+
+  def remove_item(product_id)
+    session[:cart].delete(product_id)
   end
 end

@@ -76,41 +76,47 @@
 
         <% if user_signed_in? %>
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="bi bi-person-circle"></i>
-              <%= current_user.name || current_user.email %>
-              <% if current_user.admin? %>
-                <span class="badge bg-warning text-dark">Admin</span>
-              <% end %>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-              <li>
-                <span class="dropdown-item-text">
-                  <small class="text-muted">Signed in as</small><br>
-                  <strong><%= current_user.email %></strong>
-                </span>
-              </li>
-              <li><hr class="dropdown-divider"></li>
-              <li>
-              <%= link_to orders_path, class: "dropdown-item" do %>
-                <i class="bi bi-bag-check"></i> My Orders
-              <% end %>
-              </li>
-              <% if current_user.admin? %>
-                <li>
-                  <%= link_to admin_root_path, class: "dropdown-item text-warning" do %>
-                    <i class="bi bi-speedometer2"></i> Admin Dashboard
-                  <% end %>
-                </li>
-                <li><hr class="dropdown-divider"></li>
-              <% end %>
-              <li>
-                <%= button_to destroy_user_session_path, method: :delete, class: "dropdown-item text-danger", form: { data: { turbo: false } } do %>
-                  <i class="bi bi-box-arrow-right"></i> Logout
-                <% end %>
-              </li>
-            </ul>
-          </li>
+  <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <i class="bi bi-person-circle"></i>
+    <%= current_user.name || current_user.email %>
+    <% if current_user.admin? %>
+      <span class="badge bg-warning text-dark">Admin</span>
+    <% end %>
+  </a>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+    <li>
+      <span class="dropdown-item-text">
+        <small class="text-muted">Signed in as</small><br>
+        <strong><%= current_user.email %></strong>
+      </span>
+    </li>
+    <li><hr class="dropdown-divider"></li>
+    <li>
+      <%= link_to edit_profile_path, class: "dropdown-item" do %>
+        <i class="bi bi-person"></i> Edit Profile
+      <% end %>
+    </li>
+    <li>
+      <%= link_to orders_path, class: "dropdown-item" do %>
+        <i class="bi bi-bag-check"></i> My Orders
+      <% end %>
+    </li>
+    <% if current_user.admin? %>
+      <li><hr class="dropdown-divider"></li>
+      <li>
+        <%= link_to admin_root_path, class: "dropdown-item text-warning" do %>
+          <i class="bi bi-speedometer2"></i> Admin Dashboard
+        <% end %>
+      </li>
+    <% end %>
+    <li><hr class="dropdown-divider"></li>
+    <li>
+      <%= button_to destroy_user_session_path, method: :delete, class: "dropdown-item text-danger", form: { data: { turbo: false } } do %>
+        <i class="bi bi-box-arrow-right"></i> Logout
+      <% end %>
+    </li>
+  </ul>
+</li>
         <% else %>
           <li class="nav-item">
             <%= link_to new_user_session_path, class: "nav-link" do %>

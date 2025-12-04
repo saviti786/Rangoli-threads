@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_03_182116) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_04_160931) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -69,6 +69,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_03_182116) do
     t.string "city"
     t.string "postal_code"
     t.string "province_name"
+    t.integer "user_order_number"
     t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
@@ -101,6 +102,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_03_182116) do
     t.decimal "hst", precision: 5, scale: 2, default: "0.0"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_provinces_on_name", unique: true
   end
 
   create_table "users", force: :cascade do |t|

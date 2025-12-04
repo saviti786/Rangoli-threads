@@ -19,6 +19,8 @@ gem "jbuilder"
 gem 'devise'
 gem 'faker'
 gem 'kaminari'
+gem 'rubocop'
+gem 'rubocop-rails'
 
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]

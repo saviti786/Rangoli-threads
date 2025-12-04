@@ -19,9 +19,9 @@ class OrdersController < ApplicationController
 
   # Permits order-specific fields (you will need to complete this)
   def order_params
-  params.require(:order).permit(
-    :total_amount, :gst_rate, :pst_rate, :hst_rate,
-    :street, :city, :postal_code, :province_name
-  )
+    params.require(:order).permit(
+      :total_amount, :gst_rate, :pst_rate, :hst_rate,
+      :street, :city, :postal_code, :province_name
+    )
   end
 end

@@ -1,2 +1,4 @@
-module Admin::ProductsHelper
+module Admin
+  module ProductsHelper
+  end
 end

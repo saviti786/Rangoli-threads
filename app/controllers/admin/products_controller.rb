@@ -1,20 +1,18 @@
 module Admin
   class ProductsController < Admin::BaseController
-    before_action :set_product, only: [ :show, :edit, :update, :destroy ]
+    before_action :set_product, only: %i[show edit update destroy]
 
     def index
       @products = Product.includes(:category).order(created_at: :desc).page(params[:page]).per(20)
     end
 
-    def show
-    end
+    def show; end
 
     def new
       @product = Product.new
     end
 
-    def edit
-    end
+    def edit; end
 
     def create
       @product = Product.new(product_params)
@@ -46,7 +44,8 @@ module Admin
     end
 
     def product_params
-      params.require(:product).permit(:name, :description, :price, :stock, :category_id, :image, :on_sale, :new_arrival)
+      params.require(:product).permit(:name, :description, :price, :stock, :category_id, :image,
+                                      :on_sale, :new_arrival)
     end
   end
 end

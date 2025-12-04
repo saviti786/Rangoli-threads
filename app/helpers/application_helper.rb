@@ -1,16 +1,18 @@
 module ApplicationHelper
+  ICONS = {
+    women:       "bi-person-dress",
+    men:         "bi-person",
+    accessories: "bi-gem",
+    bridal:      "bi-hearts"
+  }.freeze
+
   def category_icon(category_name)
-    case category_name.downcase
-    when /women/i
-      "bi-person-dress"
-    when /men/i
-      "bi-person"
-    when /accessory/i, /accessories/i
-      "bi-gem"
-    when /bridal/i, /wedding/i
-      "bi-hearts"
-    else
-      "bi-bag-heart"
-    end
+    name = category_name.to_s.downcase
+    return ICONS[:women] if name.match?(/women/)
+    return ICONS[:men] if name.match?(/men/)
+    return ICONS[:accessories] if name.match?(/accessory|accessories/)
+    return ICONS[:bridal] if name.match?(/bridal|wedding/)
+
+    "bi-bag-heart"
   end
 end

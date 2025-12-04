@@ -32,11 +32,16 @@ Rails.application.routes.draw do
   # Orders routes
   resources :orders, only: [ :index, :show ]
 
+  # User profile
+  get "profile/edit", to: "users#edit_profile", as: "edit_profile"
+  patch "profile", to: "users#update_profile", as: "update_profile"
+
   # Categories
   resources :categories, only: [ :show ]
 
   namespace :admin do
     resources :pages, only: [ :edit, :update ]
+    resources :orders, only: [ :index, :show ]
     # get "pages/edit"
     # get "pages/update"
     root to: "dashboard#index"
